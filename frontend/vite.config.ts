@@ -6,7 +6,7 @@ export default defineConfig(() => ({
   root: __dirname,
   cacheDir: '../node_modules/.vite/frontend',
   server:{
-    port: 400,
+    port: 4221,
     host: 'localhost',
   },
   preview:{
