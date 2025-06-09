@@ -11,8 +11,8 @@ import {
 import { ApiTags } from "@nestjs/swagger";
 import { RoleService } from "../services/role.services";
 
-@ApiTags("user")
-@Controller("user")
+@ApiTags("role")
+@Controller("role")
 export class RoleController {
   constructor(private readonly roleService: RoleService) {}
   @Post()

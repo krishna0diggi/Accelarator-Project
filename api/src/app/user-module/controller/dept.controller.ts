@@ -2,11 +2,11 @@ import { Body, Controller, Get, Param, Post, Headers, Put, Delete } from "@nestj
 import { ApiTags } from "@nestjs/swagger";
 import { DepartmentService } from "../services/dept.services";
 
-@ApiTags("user")
-@Controller("user")
+@ApiTags("dept")
+@Controller("dept")
 export class DepartmentController {
   constructor(private readonly departmentService: DepartmentService) {}
-  @Post("register")
+  @Post()
   create(@Body("name") name: string) {
     return this.departmentService.create(name);
   }

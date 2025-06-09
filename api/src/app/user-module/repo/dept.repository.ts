@@ -7,7 +7,7 @@ import { Department } from '../entities/dept.entity';
 export class DepartmentRepository {
   constructor(
     @InjectRepository(Department)
-    private readonly departmentRepo: Repository<Department>, // ✅ meaningful name
+    private readonly departmentRepo: Repository<Department>, 
   ) {}
 
   async findById(id: number): Promise<Department> {

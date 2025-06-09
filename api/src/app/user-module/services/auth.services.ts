@@ -43,10 +43,10 @@ export class AuthService {
       password: hashedPassword,
       workLocationId: registerDto.workLocation_id,
       role: role,
-      department: department, 
-      verificationCode,
-      isVerified: false, 
-      isActive: true, 
+      department: department,
+      otp: registerDto.otp.toString(),
+      isVerified: false,
+      isActive: true,
     };
 
     await this.userRepo.createUser(newUser);

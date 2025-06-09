@@ -34,6 +34,11 @@ export class RegisterDto {
   @IsNotEmpty()
   readonly workLocation_id!: number;
 
+    @ApiProperty({ example:"43985" , required: true, })
+  @Expose()
+  @IsNumber()
+  readonly otp!: string;
+
   @ApiProperty({ example: 1, required: true, description: 'Role ID (foreign key)' })
   @Expose()
   @IsNumber()

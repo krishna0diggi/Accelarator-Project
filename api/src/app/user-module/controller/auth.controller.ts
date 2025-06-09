@@ -4,8 +4,8 @@ import { AuthService } from "../services/auth.services";
 import { RegisterDto } from "../dto/register.dto";
 import { InjectRepository } from "@nestjs/typeorm";
 
-@ApiTags('user')
-@Controller('user')
+@ApiTags('auth')
+@Controller('auth')
 export class AuthController {
     constructor(
         private readonly authService: AuthService
