@@ -4,25 +4,26 @@ import Register from './pages/Public/Register';
 import Login from './pages/Public/Login';
 import Layout from './components/layout/Layout';
 import Users from './pages/Private/Users';
-import Category from './pages/Private/Category';
+import Category from './pages/Private/CategoryPage';
 import Apps from './pages/Private/Apps';
+import { AppRoute } from './routes';
+import IFrame from './pages/Private/IFrame';
 
 export function App() {
   return (
     <Routes>
       <Route path='/' element={<Navigate to="/login" replace />} />
-      <Route path='/register' element={<Register/>}/>
-      <Route path='/login' element={<Login/>}/>
-       <Route element={<Layout />}>
-          <Route path="/user" element={<Users/>} />
-          <Route path="/category" element={<Category/>} />
-          <Route path="/apps" element={<Apps/>} />
-        </Route>
-
-      <Route  />
+      <Route path='/register' element={<Register />} />
+      <Route path='/login' element={<Login />} />
+      <Route element={<Layout />}>
+        <Route path='/apps' element={<IFrame />} />
+      </Route>
       <Route />
-
+      <Route />
     </Routes>
+    // <main>
+    //   <AppRoute/>
+    // </main>
   );
 }
 

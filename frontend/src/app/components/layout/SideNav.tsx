@@ -1,18 +1,35 @@
 import React from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { Box, Button, Divider, useTheme } from "@mui/material";
+import { Box, Button, useTheme } from "@mui/material";
 import { LogOut } from 'lucide-react';
-// Your custom colors
 import {
   FORM_BACKGROUND,
   TEXT_COLOR,
   PRIMARY_TEXT,
   BULK_BG,
-} from "../../lib/colors"; 
+} from "../../lib/colors";
 
-const SideNav: React.FC = () => {
+type Subcategory = {
+  id: number;
+  name: string;
+  url: string;
+  title: string;
+  description: string;
+};
+
+type SideNavProps = {
+  subcategories: Subcategory[];
+  selectedSubcategoryId: number | "";
+  setSelectedSubcategoryId: (id: number | "") => void;
+};
+
+const SideNav = ({
+  subcategories,
+  selectedSubcategoryId,
+  setSelectedSubcategoryId,
+}: SideNavProps) => {
   const navigate = useNavigate();
-  const location = useLocation(); 
+  const location = useLocation();
   const theme = useTheme();
 
   const handleLogout = () => {
@@ -20,14 +37,13 @@ const SideNav: React.FC = () => {
     navigate("/login");
   };
 
+  const isActive = (id: number) => selectedSubcategoryId === id;
 
-  const isActive = (path: string) => location.pathname === path;
-
-  const getButtonStyle = (path: string) => ({
+  const getButtonStyle = (active: boolean) => ({
     justifyContent: "flex-start",
-    color: isActive(path) ? PRIMARY_TEXT : TEXT_COLOR,
-    backgroundColor: isActive(path) ? BULK_BG : "transparent",
-    fontWeight: isActive(path) ? "bold" : "normal",
+    color: active ? PRIMARY_TEXT : TEXT_COLOR,
+    backgroundColor: active ? BULK_BG : "transparent",
+    fontWeight: active ? "bold" : "normal",
     textTransform: "none",
     borderRadius: theme.shape.borderRadius,
     "&:hover": {
@@ -42,7 +58,6 @@ const SideNav: React.FC = () => {
       sx={{
         backgroundColor: FORM_BACKGROUND,
         mt: "70px",
-        // borderRadius: theme.shape.borderRadius,
         height: "78vh",
         width: "100%",
         display: "flex",
@@ -62,47 +77,46 @@ const SideNav: React.FC = () => {
           gap: 2,
         }}
       >
-        <Button onClick={() => navigate("/user")} sx={getButtonStyle("/user")}>
-          User
-        </Button>
-
-        <Button
-          onClick={() => navigate("/category")}
-          sx={getButtonStyle("/category")}
-        >
-          Category
-        </Button>
-
-        <Button onClick={() => navigate("/apps")} sx={getButtonStyle("/apps")}>
-          App
-        </Button>
+        {subcategories.length === 0 ? (
+          <Button disabled sx={{ justifyContent: "flex-start" }}>
+            No subcategories
+          </Button>
+        ) : (
+          subcategories.map(subcat => (
+            <Button
+              key={subcat.id}
+              onClick={() => setSelectedSubcategoryId(subcat.id)}
+              sx={getButtonStyle(isActive(subcat.id))}
+            >
+              {subcat.name}
+            </Button>
+          ))
+        )}
       </Box>
 
       {/* Logout */}
-       <Box sx={{ p: 2, borderTop: '1px solid #f0f0f0' }}>
-      <Button
-        onClick={handleLogout}
-        fullWidth
-        variant="outlined"
-        startIcon={<LogOut size={20} color="#5E35B1" />} // Lucide icon customized
-        sx={{
-          px: 6,
-          py: 1.5,
-        //   bgcolor: 'background.paper',
-          color: '#5E35B1',
-          fontWeight: 500,
-        //   borderRadius: 2,
-          textTransform: 'none',
-          transition: 'all 0.2s ease-in-out',
-          '&:hover': {
-            bgcolor: '#E3F2FD',
-            color: '#1565C0',
-          },
-        }}
-      >
-        Sign out
-      </Button>
-    </Box>
+      <Box sx={{ p: 2, borderTop: '1px solid #f0f0f0' }}>
+        <Button
+          onClick={handleLogout}
+          fullWidth
+          variant="outlined"
+          startIcon={<LogOut size={20} color="#5E35B1" />}
+          sx={{
+            px: 6,
+            py: 1.5,
+            color: '#5E35B1',
+            fontWeight: 500,
+            textTransform: 'none',
+            transition: 'all 0.2s ease-in-out',
+            '&:hover': {
+              bgcolor: '#E3F2FD',
+              color: '#1565C0',
+            },
+          }}
+        >
+          Sign out
+        </Button>
+      </Box>
     </Box>
   );
 };

@@ -4,6 +4,7 @@ import { User } from "./user.entity";
 export class Department {
     @PrimaryGeneratedColumn()
     id!:number;
+    
     @Column({unique:true})
     name!:string;
     
