@@ -82,29 +82,6 @@ export default function TopNav({
         </FormControl>
       </Box>
 
-      {/* Subcategory Select */}
-      {/* <Box sx={{ minWidth: 180 }}>
-        <FormControl fullWidth>
-          <InputLabel id="subcategory-select-label">Subcategory</InputLabel>
-          <Select
-            labelId="subcategory-select-label"
-            value={selectedSubcategoryId}
-            label="Subcategory"
-            onChange={e => setSelectedSubcategoryId(String(e.target.value) === "" ? "" : Number(e.target.value))}
-            disabled={!selectedCategory}
-          >
-            <MenuItem value="">
-              <em>Select Subcategory</em>
-            </MenuItem>
-            {selectedCategory?.subcategories.map(subcat => (
-              <MenuItem key={subcat.id} value={subcat.id}>
-                {subcat.name}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-      </Box> */}
-
       {/* Right Side Avatar */}
       <Box display="flex" alignItems="center" gap={2}>
         <Avatar

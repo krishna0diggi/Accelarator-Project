@@ -14,6 +14,12 @@ export class Category {
   @Column()
   name!: string;
 
+  @Column({default: false})
+  status!: boolean;
+
+  @Column({nullable: true})
+  order!: number
+
   @OneToMany(() => Subcategory, (subcat) => subcat.category)
   subcategories!: Subcategory[];
 }

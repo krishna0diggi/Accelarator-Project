@@ -8,11 +8,12 @@ import { CategoryRepository } from './repo/category.repository';
 import { SubcategoryRepo } from './repo/subcategory.repository';
 import { CategoryController } from './controller/category.controller';
 import { SubcategoryController } from './controller/subcategory.controller';
+import { PaginatorService } from '../../shared/paginator/paginator';
 
 
 @Module({
   imports: [TypeOrmModule.forFeature([Category, Subcategory])],
-  providers: [CategoryService, SubcategoryService, CategoryRepository, SubcategoryRepo   ],
+  providers: [CategoryService, SubcategoryService, PaginatorService, CategoryRepository, SubcategoryRepo   ],
   controllers: [CategoryController, SubcategoryController]
 })
 export class DatacruizeModule {}

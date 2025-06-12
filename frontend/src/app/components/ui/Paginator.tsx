@@ -1,4 +1,19 @@
 import React from 'react';
+import {
+  Select,
+  MenuItem,
+  Typography,
+  IconButton,
+  Box,
+  FormControl,
+  InputLabel,
+} from '@mui/material';
+import {
+  ChevronsLeft,
+  ChevronLeft,
+  ChevronRight,
+  ChevronsRight,
+} from 'lucide-react'; // ✅ Lucide icons
 
 interface PaginatorProps {
   pageIndex: number;
@@ -33,123 +48,75 @@ const Paginator: React.FC<PaginatorProps> = ({
   const pageSizes = [5, 10, 20];
   const lastPageIndex = Math.max(0, Math.ceil(totalCount / pageSize) - 1);
 
-  // const handlePageSizeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-  //   const newSize = parseInt(e.target.value);
-  //   const totalPages = Math.ceil(totalCount / newSize);
-  //   const newPageIndex =
-  //     pageIndex > totalPages ? Math.max(1, totalPages) : pageIndex;
-  //   onPageSizeChange({ pageIndex: newPageIndex, pageSize: newSize });
-  // };
-  const handlePageSizeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+  const handlePageSizeChange = (
+    event: React.ChangeEvent<{ value: unknown }> | React.ChangeEvent<HTMLInputElement> | any
+  ) => {
     const newSize = Number(event.target.value);
     onPageSizeChange?.({ pageIndex: 0, pageSize: newSize });
   };
-  
-  
+
   const handleDecrement = () => {
-    if (pageIndex > 0) {
-      onDecrement?.(pageIndex - 1);
-    }
+    if (pageIndex > 0) onDecrement?.(pageIndex - 1);
   };
-  
+
   const handleIncrement = () => {
-    if (pageIndex < lastPageIndex) {
-      onIncrement?.(pageIndex + 1);
-    }
+    if (pageIndex < lastPageIndex) onIncrement?.(pageIndex + 1);
   };
-
-  const handleOverDecrement = () => {
-    onOverDecrement?.();
-  };
-
-  const handleOverIncrement = () => {
-    onOverIncrement?.(lastPageIndex);
-  };
-  
 
   if (customizedPagiantor) return null;
 
-  const iconStyle = (disabled: boolean) =>
-    `cursor-${disabled ? 'not-allowed' : 'pointer'} ${
-      disabled ? 'opacity-40' : 'hover:text-black'
-    }`;
-
   return (
-    <div
-      className={`flex justify-end items-center h-12 p-4 gap-12 ${
-        isBlock ? 'bg-deepPurple' : 'bg-gray-100'
-      } rounded-b-[15px]`}
+    <Box
+      display="flex"
+      justifyContent="end"
+      alignItems="center"
+      height={60}
+      px={3}
+      py={1}
+      sx={{
+        backgroundColor: isBlock ? 'purple.200' : 'grey.100',
+        borderBottomLeftRadius: 12,
+        borderBottomRightRadius: 12,
+      }}
     >
-      {/* Page Size Selector */}
-      <div className="flex items-center">
-        <span className="text-sm text-textColor whitespace-nowrap">
-          Rows per page:
-        </span>
-        <select
+      {/* Page size selector */}
+      <FormControl variant="outlined" size="small">
+        <InputLabel id="page-size-label">Rows</InputLabel>
+        <Select
+          labelId="page-size-label"
           value={pageSize}
           onChange={handlePageSizeChange}
-          className="ml-4 border-2 text-sm rounded-md w-16 h-9 text-textColor"
+          label="Rows"
         >
-          {pageSizes.map((item) => (
-            <option  className="hover:bg-deepPurple hover:text-white" key={item} value={item}>
-              {item}
-            </option>
+          {pageSizes.map((size) => (
+            <MenuItem key={size} value={size}>
+              {size}
+            </MenuItem>
           ))}
-        </select>
-      </div>
+        </Select>
+      </FormControl>
 
-      {/* Range Info */}
-      <div className="text-lg text-textColor whitespace-nowrap">
+      {/* Page range info */}
+      <Typography variant="body1" color="textSecondary">
         {from} - {to} of {totalCount}
-      </div>
+      </Typography>
 
-      {/* Navigation Buttons */}
-      <div className="flex gap-2 items-center w-28 justify-between">
-        {/* Over Decrement */}
-        <button
-          disabled={pageIndex === 0}
-          onClick={handleOverDecrement}
-          className={iconStyle(pageIndex === 0)}
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24" fill="currentColor">
-            <path d="M445-253.85 218.85-480 445-706.15 487.15-664 303.77-480l183.38 184L445-253.85Zm254 0L472.85-480 699-706.15 741.15-664 557.77-480l183.38 184L699-253.85Z"/>
-          </svg>
-        </button>
-
-        {/* Decrement */}
-        <button
-          disabled={pageIndex === 0}
-          onClick={handleDecrement}
-          className={iconStyle(pageIndex === 0)}
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24" fill="currentColor">
-            <path d="M560-253.85 333.85-480 560-706.15 602.15-664l-184 184 184 184L560-253.85Z"/>
-          </svg>
-        </button>
-
-        {/* Increment */}
-        <button
-          disabled={pageIndex >= lastPageIndex}
-          onClick={handleIncrement}
-          className={iconStyle(pageIndex >= lastPageIndex)}
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24" fill="currentColor">
-            <path d="m517.85-480-184-184L376-706.15 602.15-480 376-253.85 333.85-296l184-184Z"/>
-          </svg>
-        </button>
-
-        {/* Over Increment */}
-        <button
-          disabled={pageIndex >= lastPageIndex}
-          onClick={handleOverIncrement}
-          className={iconStyle(pageIndex >= lastPageIndex)}
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24" fill="currentColor">
-            <path d="M402.23-480 218.85-664 261-706.15 487.15-480 261-253.85 218.85-296l183.38-184Zm254 0L472.85-664 515-706.15 741.15-480 515-253.85 472.85-296l183.38-184Z"/>
-          </svg>
-        </button>
-      </div>
-    </div>
+      {/* Navigation buttons with Lucide Icons */}
+      <Box display="flex" gap={1} alignItems="center">
+        <IconButton onClick={onOverDecrement} disabled={pageIndex === 0}>
+          <ChevronsLeft size={20} />
+        </IconButton>
+        <IconButton onClick={handleDecrement} disabled={pageIndex === 0}>
+          <ChevronLeft size={20} />
+        </IconButton>
+        <IconButton onClick={handleIncrement} disabled={pageIndex >= lastPageIndex}>
+          <ChevronRight size={20} />
+        </IconButton>
+        <IconButton onClick={() => onOverIncrement(lastPageIndex)} disabled={pageIndex >= lastPageIndex}>
+          <ChevronsRight size={20} />
+        </IconButton>
+      </Box>
+    </Box>
   );
 };
 

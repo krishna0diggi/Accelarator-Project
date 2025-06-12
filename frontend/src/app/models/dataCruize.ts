@@ -12,3 +12,10 @@ export type Category = {
   name: string;
   subcategories: Subcategory[];
 };
+
+
+export type subCategoryData = {
+  name: string,
+  categoryId: number,
+  status: boolean
+}

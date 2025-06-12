@@ -24,7 +24,13 @@ export class Subcategory {
   @Column()
   description!: string;
 
-  @ManyToOne(() => Category, (cat) => cat.subcategories,)
+  @Column({ default: false })
+  status!: boolean;
+
+  @Column({nullable:true})
+  order!:number
+
+  @ManyToOne(() => Category, (cat) => cat.subcategories)
   @JoinColumn({ name: "category_id" }) // This will create a category_id column in Subcategory table
   category!: Category;
 }
