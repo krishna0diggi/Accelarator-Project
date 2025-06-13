@@ -1,12 +1,14 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
+import { ILike, Repository } from "typeorm";
 import { Subcategory } from "../entities/subcategory.entities";
+import { PaginatorService } from "../../../shared/paginator/paginator";
 @Injectable()
 export class SubcategoryRepo {
   constructor(
     @InjectRepository(Subcategory)
-    private readonly subcategoryRepo: Repository<Subcategory>
+    private readonly subcategoryRepo: Repository<Subcategory>,
+    private readonly paginatorService: PaginatorService
   ) {}
   async createSubcategory(
     subcatData: Partial<Subcategory>
@@ -15,7 +17,7 @@ export class SubcategoryRepo {
     return this.subcategoryRepo.save(CreateSubcategoryData);
   }
   async findAll(): Promise<Subcategory[]> {
-    return this.subcategoryRepo.find();
+    return this.subcategoryRepo.find({where: {status:true}});
   }
   async findById(id: number): Promise<Subcategory> {
     const subcateId = await this.subcategoryRepo.findOne({ where: { id: id } });
@@ -24,33 +26,75 @@ export class SubcategoryRepo {
     }
     return subcateId;
   }
-  async findSubcategoryWithCategory():Promise<any>{
-    const result = await this.subcategoryRepo.createQueryBuilder('subcategory')
-     .innerJoinAndSelect('subcategory.category', 'category') 
-    .select([
-      'subcategory.id',
-      'subcategory.name',
-      'subcategory.url',
-      'subcategory.title',
-      'subcategory.description',
-      'category.name'  
-    ])
-    .getMany();
 
-  const formatted = result.map(subcat => ({
-    ...subcat,
-    categoryName: subcat.category.name
-  }));
+  async findAllWithPaginator(
+    pageIndex: number,
+    pageSize: number,
+    searchValue: string
+  ): Promise<{ result: any[]; paginatorValue: any }> {
+    const cleanedSearch = searchValue?.trim().replace(/^"|"$/g, "");
 
-  return formatted;
+    // console.log("Cleaned Search value:", cleanedSearch);
+
+    const whereClause = cleanedSearch
+      ? { name: ILike(`%${cleanedSearch}%`) }
+      : {};
+
+    // console.log("Where clause:", whereClause);
+
+    const skip = (pageIndex - 1) * pageSize;
+
+    const [subcategoryList, totalCount] = await this.subcategoryRepo.findAndCount({
+      where: whereClause,
+      take: pageSize,
+      skip,
+      order: { id: "DESC" },
+    });
+
+    const result = subcategoryList.map((item) => ({
+      id: item.id,
+      name: item.name,
+      order: item.order,
+      status: item.status,
+    }));
+
+    const paginatorValue = await this.paginatorService.paginatorCount(
+      pageIndex,
+      pageSize,
+      totalCount,
+      result
+    );
+
+    return { result, paginatorValue };
+  }
+  async findSubcategoryWithCategory(): Promise<any> {
+    const result = await this.subcategoryRepo
+      .createQueryBuilder("subcategory")
+      .innerJoinAndSelect("subcategory.category", "category")
+      .select([
+        "subcategory.id",
+        "subcategory.name",
+        "subcategory.url",
+        "subcategory.title",
+        "subcategory.description",
+        "category.name",
+      ])
+      .getMany();
+
+    const formatted = result.map((subcat) => ({
+      ...subcat,
+      categoryName: subcat.category.name,
+    }));
+
+    return formatted;
   }
 
-async findByName(name: string): Promise<Subcategory | null> {
-  return await this.subcategoryRepo.findOne({
-    where: { name: name.toLowerCase() },
-  });
-}
-  
+  async findByName(name: string): Promise<Subcategory | null> {
+    return await this.subcategoryRepo.findOne({
+      where: { name: name.toLowerCase() },
+    });
+  }
+
   async updateSubcategory(
     id: number,
     updateData: Partial<Subcategory>

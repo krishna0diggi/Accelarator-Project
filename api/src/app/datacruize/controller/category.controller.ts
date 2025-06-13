@@ -31,7 +31,6 @@ export class CategoryController {
   async getActiveCategory(){
     return this.catService.getAllActive()
   }
-  
   @Get(':id')
   async getById(@Param('id', ParseIntPipe) id: number) {
     return this.catService.getCategoryById(id);
@@ -52,7 +51,7 @@ export class CategoryController {
     @Param('id', ParseIntPipe) id: number,
     @Body() dto: CategoryDto
   ) {
-    return this.catService.update(id, dto.name);
+    return this.catService.update(id, dto);
   }
 
   @Delete(':id')

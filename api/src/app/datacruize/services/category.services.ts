@@ -24,6 +24,7 @@ export class CategoryService {
   async delete(id: number) {
     return await this.categoryRepo.deleteCategory(id);
   }
+  // ADMIN 
   async getAll(
     pageIndex: number,
     pageSize: number,
@@ -31,13 +32,19 @@ export class CategoryService {
   ): Promise<any> {
    return this.categoryRepo.findAllWithPaginator(pageIndex,pageSize, searchValue)
   }
+
+  // USER
   async getAllActive(){
     return this.categoryRepo.findAll()
   }
-
-  async update(id: number, name: string) {
-    return this.categoryRepo.updateCategory(id, name);
+  
+  // ADMIN
+  async update(id:number, updateData: Partial<CategoryDto>) {
+    console.log("Id", id);
+    console.log("To update the data", updateData);
+    return this.categoryRepo.updateCategory(id, updateData);
   }
+
   async getCategoryById(id:number){
     return this.categoryRepo.findById(id)
   }

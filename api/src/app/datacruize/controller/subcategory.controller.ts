@@ -7,6 +7,7 @@ import {
   Put,
   Delete,
   ParseIntPipe,
+  Query,
 } from '@nestjs/common';
 import { ApiTags } from "@nestjs/swagger";
 // import { SubcategoryService } from './subcategory.service';
@@ -24,10 +25,20 @@ export class SubcategoryController {
     return this.subcategoryService.create(dto);
   }
 
-  @Get()
-  async getAll() {
-    return this.subcategoryService.getAll();
+  @Get('/getall')
+  async getAllActive() {
+    return this.subcategoryService.getAllActive();
   }
+  
+  @Get()
+  async getAll(
+    @Query('pageIndex') pageIndex:number,
+    @Query('pageSize') pageSize:number,
+    @Query('searchFilter') searchValue: string
+)
+{
+  return this.subcategoryService.getAll(pageIndex, pageSize, searchValue)
+}
   @Get('/subcat-with-cat')
   async getSubcatWithCategory(){
     return this.subcategoryService.getSubcategoryWithCategory()

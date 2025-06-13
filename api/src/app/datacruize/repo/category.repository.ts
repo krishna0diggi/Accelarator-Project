@@ -18,24 +18,24 @@ export class CategoryRepository {
     return this.categoryRepo.save(category);
   }
   async findAll(): Promise<Category[]> {
-    return this.categoryRepo.find({where: {status: true}});
+    return this.categoryRepo.find({ where: { status: true }, order:{order:"ASC"} });
   }
   async findAllWithPaginator(
     pageIndex: number,
     pageSize: number,
     searchValue: string
   ): Promise<{ result: any[]; paginatorValue: any }> {
-    console.log("Search value", searchValue);
+    // console.log("Search value", searchValue);
 
     const cleanedSearch = searchValue?.trim().replace(/^"|"$/g, "");
 
-    console.log("Cleaned Search value:", cleanedSearch);
+    // console.log("Cleaned Search value:", cleanedSearch);
 
     const whereClause = cleanedSearch
       ? { name: ILike(`%${cleanedSearch}%`) }
       : {};
 
-    console.log("Where clause:", whereClause);
+    // console.log("Where clause:", whereClause);
 
     const skip = (pageIndex - 1) * pageSize;
 
@@ -84,6 +84,7 @@ export class CategoryRepository {
         "subcategory.title",
         "subcategory.description",
       ])
+      .where("category.status = :status",{status:true})
       .getMany();
     // const formatted = result.map(category => ({
     //   ...category,
@@ -91,9 +92,18 @@ export class CategoryRepository {
     // }))
     return result;
   }
-  async updateCategory(id: number, name: string): Promise<Category> {
-    const category = await this.findById(id);
-    category.name = name;
+  async updateCategory(
+    id: number,
+    updateData: Partial<CategoryDto>
+  ): Promise<Category> {
+    const category = await this.categoryRepo.findOne({ where: { id: id } });
+    if (!category) {
+      throw new NotFoundException(`category Not found with id: ${id}`);
+    }
+    Object.assign(category, updateData);
+
+    // category.name = dto.name;
+    // category.status = dto.status;
     return this.categoryRepo.save(category);
   }
   async deleteCategory(id: number): Promise<void> {
