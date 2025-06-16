@@ -3,14 +3,16 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { User } from "../entities/user.entity";
 import { Role } from "../entities/role.entity";
-
+// import { JwtService } from "@nestjs/jwt";
+import * as bcrypt from "bcryptjs";
 @Injectable()
 export class UsersRepository {
   constructor(
     @InjectRepository(User)
     private user: Repository<User>,
     @InjectRepository(Role)
-    private roleRepo: Repository<Role>
+    private roleRepo: Repository<Role>,
+    // private readonly jwtService: JwtService
   ) {}
 
   async findByEmail(email: string): Promise<User | null> {
@@ -65,4 +67,24 @@ export class UsersRepository {
     Object.assign(user, updateData);
     return this.user.save(user);
   }
+  // async validate(email: string, pass: string): Promise<any> {
+  //   const user = await this.user.findOne({ where: { email: email } });
+  //   if (user && user.password === pass) {
+  //     const { password, ...result } = user;
+  //     return result;
+  //   }
+  // }
+  async validateUser(email: string, password: string): Promise<User | null> {
+    const user = await this.findByEmail(email);
+    if (user && (await bcrypt.compare(password, user.password))) {
+      return user;
+    }
+    return null;
+  }
+  // async login(user: any) {
+  //   const payload = { email: user.email, sub: user.userId };
+  //   return {
+  //     access_token: this.jwtService.sign(payload),
+  //   };
+  // }
 }

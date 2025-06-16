@@ -5,6 +5,7 @@ import { UserModuleModule } from './user-module/user-module.module';
 import { DatacruizeModule } from './datacruize/datacruize.module';
 import { DB_CONFIG } from '../config/DB.config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { AuthModuleModule } from './auth-module/auth-module.module';
 
 @Module({
   imports: [ TypeOrmModule.forRoot(DB_CONFIG), UserModuleModule, DatacruizeModule],

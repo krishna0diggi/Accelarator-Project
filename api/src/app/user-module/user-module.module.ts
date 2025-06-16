@@ -4,10 +4,10 @@ import { UserService } from './services/user.services';
 import { UsersController } from './controller/user.controller';
 import { RoleService } from './services/role.services';
 import { DepartmentService } from './services/dept.services';
-import { AuthService } from './services/auth.services';
+// import { AuthService } from './services/auth.services';
 import { RoleController } from './controller/role.controller';
 import { DepartmentController } from './controller/dept.controller';
-import { AuthController } from './controller/auth.controller';
+// import { AuthController } from './controller/auth.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Role } from './entities/role.entity';
 import { Department } from './entities/dept.entity';
@@ -18,7 +18,8 @@ import { UsersRepository } from './repo/users.repository';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Role, Department,User])],
-  providers: [UserService,RoleService,DepartmentService,AuthService,RoleRepository, DepartmentRepository, UsersRepository],
-  controllers: [UsersController, RoleController, DepartmentController, AuthController]
+  providers: [UserService,RoleService,DepartmentService,RoleRepository, DepartmentRepository, UsersRepository],
+  controllers: [UsersController, RoleController, DepartmentController],
+  exports: [UserService, TypeOrmModule.forFeature([Role, Department,User])]
 })
 export class UserModuleModule {}

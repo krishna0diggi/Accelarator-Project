@@ -9,6 +9,7 @@ import {
   Injectable,
   NotFoundException,
 } from "@nestjs/common";
+import { ResetPasswordDto } from "../dto/resetPassword";
 
 @Injectable()
 export class AuthService {
@@ -54,4 +55,67 @@ export class AuthService {
     return { message: "User Registered Successfully" };
   }
   async login(loginDto: LoginDto) {}
+
+   async getCurrentUser(authHeader: string): Promise<any> {
+    // if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    //   throw new UnauthorizedException('Invalid token format');
+    // }
+
+    // const token = authHeader.split(' ')[1];
+
+    // if (!token) {
+    //   throw new UnauthorizedException('Token missing');
+    // }
+
+    // try {
+    //   const decoded = jwt.verify(
+    //     token,
+    //     this.jwtSecret as string
+    //   ) as DecodedToken;
+
+    //   const employee = await this.employeeRepository.findOne({
+    //     where: { email: decoded.email },
+    //     relations: ['department', 'worklocation', 'role'],
+    //   });
+
+    //   if (!employee) {
+    //     throw new UnauthorizedException('User not found');
+    //   }
+
+    //   const userWithoutSensitiveData = {
+    //     id: employee.id,
+    //     empId: employee.empID,
+    //     name: employee.name,
+    //     email: employee.email,
+    //     department: {
+    //       id: employee.department.id,
+    //       name: employee.department.name,
+    //     },
+    //     worklocation: {
+    //       id: employee.worklocation.id,
+    //       location: employee.worklocation.location,
+    //     },
+    //     role: employee.role.name,
+    //   };
+
+    //   return userWithoutSensitiveData;
+    // } catch (error) {
+    //   throw new UnauthorizedException('Token is invalid or expired');
+    // }
+  }
+  async verifyOtp(email:string, otp:string){
+     return { message: 'Registration successful. Account created.' };
+
+  }
+  async sendResetOtp(email:string){
+
+  }
+  async resetPassword(dto:ResetPasswordDto)
+  {
+
+  }
+  async resendOtp(email:string)
+  {
+
+  }
 }
