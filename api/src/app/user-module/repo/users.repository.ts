@@ -11,27 +11,34 @@ export class UsersRepository {
     @InjectRepository(User)
     private user: Repository<User>,
     @InjectRepository(Role)
-    private roleRepo: Repository<Role>,
-    // private readonly jwtService: JwtService
+    private roleRepo: Repository<Role> // private readonly jwtService: JwtService
   ) {}
 
   async findByEmail(email: string): Promise<User | null> {
     return this.user.findOne({ where: { email } });
   }
-  async checkDuplicateEmailOrEmpId(
-    email: string,
-    empId: string
-  ): Promise<void> {
-    const userByEmail = await this.user.findOne({ where: { email } });
-    if (userByEmail) {
-      throw new BadRequestException("Email already exists");
-    }
 
-    const userByEmpId = await this.user.findOne({ where: { empId } });
-    if (userByEmpId) {
-      throw new BadRequestException("Employee ID already exists");
-    }
+  async findByEmailWithRelation(email: string): Promise<User | null> {
+    return await this.user.findOne({
+      where: { email },
+      relations: ["role", "department"], // Explicitly load both relations
+    });
   }
+
+  // async checkDuplicateEmailOrEmpId(
+  //   email: string,
+  //   empId: string
+  // ): Promise<void> {
+  //   const userByEmail = await this.user.findOne({ where: { email } });
+  //   if (userByEmail) {
+  //     throw new BadRequestException("Email already exists");
+  //   }
+
+  //   const userByEmpId = await this.user.findOne({ where: { empId } });
+  //   if (userByEmpId) {
+  //     throw new BadRequestException("Employee ID already exists");
+  //   }
+  // }
 
   async findRoleById(roleId: number): Promise<Role> {
     const role = await this.roleRepo.findOne({ where: { id: roleId } });

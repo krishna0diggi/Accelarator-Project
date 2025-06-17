@@ -15,11 +15,14 @@ import { User } from './entities/user.entity';
 import { RoleRepository } from './repo/role.repository';
 import { DepartmentRepository } from './repo/dept.repository';
 import { UsersRepository } from './repo/users.repository';
+// import { AuthController } from '../auth-module/auth.controller';
+import { AuthService } from './services/auth.services';
+import { AuthController } from './controller/auth.controller';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Role, Department,User])],
-  providers: [UserService,RoleService,DepartmentService,RoleRepository, DepartmentRepository, UsersRepository],
-  controllers: [UsersController, RoleController, DepartmentController],
+  providers: [UserService,RoleService,DepartmentService, AuthService,RoleRepository, DepartmentRepository, UsersRepository],
+  controllers: [UsersController, RoleController, DepartmentController, AuthController],
   exports: [UserService, TypeOrmModule.forFeature([Role, Department,User])]
 })
 export class UserModuleModule {}

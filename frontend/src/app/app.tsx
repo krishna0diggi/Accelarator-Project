@@ -11,25 +11,48 @@ import IFrame from './pages/Private/IFrame';
 import CategoryPage from './pages/Private/Master/CategoryPage';
 import Master from './pages/Private/Master';
 import SubcategoryPage from './pages/Private/Master/SubcategoryPage';
+import { AuthProvider } from './contexts/AuthContext';
+import ProtectedRoute from './contexts/ProtectedRoute';
+import { ROLES } from './lib/roles';
 
 export function App() {
   return (
-    <Routes>
-      <Route path='/' element={<Navigate to="/login" replace />} />
-      <Route path='/register' element={<Register />} />
-      <Route path='/login' element={<Login />} />
-      <Route element={<Layout />}>
-        <Route path='/apps' element={<IFrame />} />
-        {/* <Route path='/datascruize' element={<CategoryPage />} /> */}
-        <Route path='/datacruize' element={<Master />}>
-          <Route index element={<Navigate to="category" replace />} />
-          <Route path='category' element={<CategoryPage />} />
-          <Route path='subcategory' element={<SubcategoryPage />} />
-        </Route>
-      </Route>
-      <Route />
-      <Route />
-    </Routes>
+    <AuthProvider>
+      <Routes>
+        <Route path='/' element={<Navigate to="/login" replace />} />
+        <Route path='/register' element={<Register />} />
+        <Route path='/login' element={<Login />} />
+         <Route element={<Layout />}>
+            <Route path='/apps' element={<IFrame />} />
+            <Route path='/datacruize' element={<Master />}>
+              <Route index element={<Navigate to="category" replace />} />
+              <Route path='category' element={<CategoryPage />} />
+              <Route path='subcategory' element={<SubcategoryPage />} />
+            </Route>
+          </Route>
+
+        {/* <Route element={<ProtectedRoute allowedRoles={[ROLES.USER]} />}>
+          <Route element={<Layout />}>
+            <Route path='/apps' element={<IFrame />} />
+            <Route path='/datacruize' element={<Master />}>
+              <Route index element={<Navigate to="category" replace />} />
+              <Route path='category' element={<CategoryPage />} />
+              <Route path='subcategory' element={<SubcategoryPage />} />
+            </Route>
+          </Route>
+        </Route> */}
+
+        {/* <Route element={<Layout />}>
+          <Route path='/apps' element={<IFrame />} />
+          <Route path='/datacruize' element={<Master />}>
+            <Route index element={<Navigate to="category" replace />} />
+            <Route path='category' element={<CategoryPage />} />
+            <Route path='subcategory' element={<SubcategoryPage />} />
+          </Route>
+        </Route> */}
+
+      </Routes>
+    </AuthProvider>
     // <main>
     //   <AppRoute/>
     // </main>

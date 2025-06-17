@@ -31,12 +31,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         setLoading(true);
         setError(null);
         try {
-            const res = await api.post('/employee/login', credentials);
+            const res = await api.post('/auth/login', credentials);
             const { token, user } = res.data;
             localStorage.setItem('token', token);
             setToken(token);
             setUser(user);
             setIsAuthenticated(true);
+            fetchCurrentUser()
         } catch (err: any) {
             setError(err.response?.data?.message || 'Login failed');
         } finally {
@@ -47,7 +48,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         setLoading(true);
         setError(null);
         try {
-            const res = await api.post('/employee/register', data);
+            const res = await api.post('/auth/register', data);
             const { token, user } = res.data;
             localStorage.setItem('token', token);
             setToken(token);
@@ -70,7 +71,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const fetchCurrentUser = async () => {
         setLoading(true)
         try {
-            const res = await api.get('/user', {
+            const res = await api.get('/auth/me', {
                 headers: {
                     Authorization: `Bearer${token}`
                 },

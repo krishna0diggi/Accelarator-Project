@@ -3,16 +3,25 @@ import { UsersRepository } from "../repo/users.repository";
 import { RoleRepository } from "../repo/role.repository";
 import { DepartmentRepository } from "../repo/dept.repository";
 import { LoginDto } from "../dto/login.dto";
+import * as jwt from 'jsonwebtoken';
 import * as bcrypt from "bcryptjs";
 import {
   BadRequestException,
   Injectable,
   NotFoundException,
+  UnauthorizedException,
 } from "@nestjs/common";
 import { ResetPasswordDto } from "../dto/resetPassword";
 
+interface DecodedToken {
+  id: string;
+  email: string;
+  role: string;
+}
+
 @Injectable()
 export class AuthService {
+   public jwtSecret = process.env.JWT_SECRET;
   constructor(
     private readonly userRepo: UsersRepository,
     private readonly roleRepo: RoleRepository,
@@ -40,12 +49,12 @@ export class AuthService {
     const newUser: Partial<any> = {
       name: registerDto.name,
       email: registerDto.email,
-      empId: registerDto.emp_id,
+      // empId: registerDto.emp_id,
       password: hashedPassword,
-      workLocationId: registerDto.workLocation_id,
+      // workLocationId: registerDto.workLocation_id,
       role: role,
       department: department,
-      otp: registerDto.otp.toString(),
+      otp: verificationCode,
       isVerified: false,
       isActive: true,
     };
@@ -54,54 +63,90 @@ export class AuthService {
 
     return { message: "User Registered Successfully" };
   }
-  async login(loginDto: LoginDto) {}
+  async login(loginDto: LoginDto):Promise<{
+    user: {
+      id: number;
+      name: string;
+      email: string;
+      role: string;
+    };
+    token: string;
+  }> {
+    const employee = await this.userRepo.findByEmailWithRelation(loginDto.email)
+    if(employee?.isVerified === false) {
+      throw new UnauthorizedException('Account not verified. Please verify your account first')
+    }
+    if(!employee || !employee.password){
+      throw new UnauthorizedException('Invalid Credentials')
+    }
+    const isPasswordValid = await bcrypt.compare(loginDto.password, employee.password)
+    if(!isPasswordValid){
+      throw new UnauthorizedException('Invalid Credentials')
+    }
+      if (!this.jwtSecret) {
+      throw new Error('JWT_SECRET is not set in environment variables');
+    }
+     let currentRole = employee.role.name;
+      const token = jwt.sign(
+      {
+        name: employee.name,
+        email: employee.email,
+        role: currentRole,
+      },
+      this.jwtSecret,
+      { expiresIn: '1d' }
+    );
+
+    const user = {
+      id: employee.id,
+      name: employee.name,
+      email: employee.email,
+      role: currentRole,
+    };
+    // console.log(user);
+
+    return { user, token };
+  }
 
    async getCurrentUser(authHeader: string): Promise<any> {
-    // if (!authHeader || !authHeader.startsWith('Bearer ')) {
-    //   throw new UnauthorizedException('Invalid token format');
-    // }
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      throw new UnauthorizedException('Invalid token format');
+    }
 
-    // const token = authHeader.split(' ')[1];
+    const token = authHeader.split(' ')[1];
 
-    // if (!token) {
-    //   throw new UnauthorizedException('Token missing');
-    // }
+    if (!token) {
+      throw new UnauthorizedException('Token missing');
+    }
 
-    // try {
-    //   const decoded = jwt.verify(
-    //     token,
-    //     this.jwtSecret as string
-    //   ) as DecodedToken;
+    try {
+      const decoded = jwt.verify(
+        token,
+        this.jwtSecret as string
+      ) as DecodedToken;
 
-    //   const employee = await this.employeeRepository.findOne({
-    //     where: { email: decoded.email },
-    //     relations: ['department', 'worklocation', 'role'],
-    //   });
+      const employee = await this.userRepo.findByEmailWithRelation(decoded.email)
 
-    //   if (!employee) {
-    //     throw new UnauthorizedException('User not found');
-    //   }
+      if (!employee) {
+        throw new UnauthorizedException('User not found');
+      }
 
-    //   const userWithoutSensitiveData = {
-    //     id: employee.id,
-    //     empId: employee.empID,
-    //     name: employee.name,
-    //     email: employee.email,
-    //     department: {
-    //       id: employee.department.id,
-    //       name: employee.department.name,
-    //     },
-    //     worklocation: {
-    //       id: employee.worklocation.id,
-    //       location: employee.worklocation.location,
-    //     },
-    //     role: employee.role.name,
-    //   };
+      const userWithoutSensitiveData = {
+        id: employee.id,
+  
+        name: employee.name,
+        email: employee.email,
+        department: {
+          id: employee.department.id,
+          name: employee.department.name,
+        },
+        role: employee.role.name,
+      };
 
-    //   return userWithoutSensitiveData;
-    // } catch (error) {
-    //   throw new UnauthorizedException('Token is invalid or expired');
-    // }
+      return userWithoutSensitiveData;
+    } catch (error) {
+      throw new UnauthorizedException('Token is invalid or expired');
+    }
   }
   async verifyOtp(email:string, otp:string){
      return { message: 'Registration successful. Account created.' };

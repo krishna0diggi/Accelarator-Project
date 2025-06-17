@@ -30,7 +30,7 @@ export class AuthController {
     return user;
   }
   @Get('me')
-  async getProfile(@Headers('authorization') authHeader: string) {
+  async getProfile(@Headers('Authorization') authHeader: string) {
     const user = await this.authService.getCurrentUser(authHeader);
     return {
       message: 'Current user fetched successfully',
