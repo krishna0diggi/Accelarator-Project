@@ -26,6 +26,8 @@ const ProtectedRoute = ({ allowedRoles }: ProtectedRouteProps = {}) => {
   if (!isAutheticated) {
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
+   console.log("uuser", user);
+   
 
   const userRole = user?.role; // "admin" | "user" | "superadmin" | undefined
   // console.log(userRole);
@@ -39,6 +41,8 @@ const ProtectedRoute = ({ allowedRoles }: ProtectedRouteProps = {}) => {
       </div>
     );
   }
+  console.log(userRole);
+  
 
   if (allowedRoles && allowedRoles.length > 0) {
     if (!allowedRoles.includes(userRole)) {
@@ -50,7 +54,7 @@ const ProtectedRoute = ({ allowedRoles }: ProtectedRouteProps = {}) => {
   if (userRole === ROLES.ADMIN) {
     const fromPath = location.pathname;
     if (fromPath === "/" || fromPath === "/protected" || fromPath === "/home") {
-      return <Navigate to="/admin/dashboard" replace />;
+      return <Navigate to="/datacruize" replace />;
     }
   }
 

@@ -5,16 +5,22 @@ import { useEffect, useState } from 'react';
 import { Box, Toolbar, Drawer, CssBaseline } from '@mui/material';
 import { getCategoryWithSubcategory } from '../../service/dataCruizeApi/category';
 import { Category, Subcategory } from '../../models/dataCruize';
+import { useAuth } from '../../contexts/AuthContext';
 const drawerWidth = 300;
 
 const Layout = () => {
   const [isSidenavOpen, setIsSidenavOpen] = useState(true);
   const [age, setAge] = useState(''); // <--- lifted state
+  const [isAdmin, setIsAdmin] = useState(false)
   const [layoutData, setLayoutData] = useState<Category[]>([]);
   const [selectedCategoryId, setSelectedCategoryId] = useState<number | "">("");
   const [selectedSubcategoryId, setSelectedSubcategoryId] = useState<number | "">("");
   const selectedCategory = layoutData.find(cat => cat.id === selectedCategoryId);
   const selectedSubcategories = selectedCategory ? selectedCategory.subcategories : [];
+
+  const {user} = useAuth()
+  console.log("User is",user);
+  
 
   useEffect(() => {
     fetchLayout()

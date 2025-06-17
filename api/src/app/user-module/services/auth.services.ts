@@ -15,6 +15,7 @@ import { ResetPasswordDto } from "../dto/resetPassword";
 
 interface DecodedToken {
   id: string;
+  name: string;
   email: string;
   role: string;
 }
@@ -103,7 +104,7 @@ export class AuthService {
       email: employee.email,
       role: currentRole,
     };
-    // console.log(user);
+    console.log(user);
 
     return { user, token };
   }
@@ -142,6 +143,8 @@ export class AuthService {
         },
         role: employee.role.name,
       };
+      console.log("Auth service after login", userWithoutSensitiveData);
+      
 
       return userWithoutSensitiveData;
     } catch (error) {

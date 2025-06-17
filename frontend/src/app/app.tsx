@@ -14,6 +14,9 @@ import SubcategoryPage from './pages/Private/Master/SubcategoryPage';
 import { AuthProvider } from './contexts/AuthContext';
 import ProtectedRoute from './contexts/ProtectedRoute';
 import { ROLES } from './lib/roles';
+import Unauthorized from './pages/Public/UnAuthorized';
+import NotFound from './pages/Public/NotFound';
+import AdminLayout from './components/layout/AdminLayout';
 
 export function App() {
   return (
@@ -22,40 +25,27 @@ export function App() {
         <Route path='/' element={<Navigate to="/login" replace />} />
         <Route path='/register' element={<Register />} />
         <Route path='/login' element={<Login />} />
-         <Route element={<Layout />}>
-            <Route path='/apps' element={<IFrame />} />
-            <Route path='/datacruize' element={<Master />}>
-              <Route index element={<Navigate to="category" replace />} />
-              <Route path='category' element={<CategoryPage />} />
-              <Route path='subcategory' element={<SubcategoryPage />} />
-            </Route>
-          </Route>
+        <Route path='/unauthorized' element={<Unauthorized />} />
 
-        {/* <Route element={<ProtectedRoute allowedRoles={[ROLES.USER]} />}>
+        <Route element={<ProtectedRoute allowedRoles={[ROLES.USER, ROLES.ADMIN]} />}>
           <Route element={<Layout />}>
             <Route path='/apps' element={<IFrame />} />
-            <Route path='/datacruize' element={<Master />}>
-              <Route index element={<Navigate to="category" replace />} />
-              <Route path='category' element={<CategoryPage />} />
-              <Route path='subcategory' element={<SubcategoryPage />} />
-            </Route>
           </Route>
-        </Route> */}
+        </Route>
 
-        {/* <Route element={<Layout />}>
-          <Route path='/apps' element={<IFrame />} />
+        <Route element={<ProtectedRoute allowedRoles={[ROLES.ADMIN]} />}>
+        <Route element={<AdminLayout />}>
           <Route path='/datacruize' element={<Master />}>
             <Route index element={<Navigate to="category" replace />} />
             <Route path='category' element={<CategoryPage />} />
             <Route path='subcategory' element={<SubcategoryPage />} />
           </Route>
-        </Route> */}
+        </Route>
+        </Route>
 
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </AuthProvider>
-    // <main>
-    //   <AppRoute/>
-    // </main>
   );
 }
 

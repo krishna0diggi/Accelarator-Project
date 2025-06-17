@@ -44,10 +44,10 @@ const LoginPage: React.FC = () => {
       case ROLES.SUPER_ADMIN:
         return navigate('/superAdmin/dashboard');
       case ROLES.ADMIN:
-        return navigate('/apps');
+        return navigate('/datacruize');
       case ROLES.USER:
       default:
-        return navigate('/employee/my-assets');
+        return navigate('/apps');
     }
   };
 

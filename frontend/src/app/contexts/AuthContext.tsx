@@ -3,9 +3,10 @@ import axios from 'axios'
 import { useNavigate } from "react-router-dom";
 import { LoginCredentials, SignUpCredentials, User } from "../models/authType";
 import api from "../service/api";
+import { toast } from "react-toastify";
 type AuthContextType = {
-    user: User|null;
-    token: string|null;
+    user: User | null;
+    token: string | null;
     isAutheticated: boolean;
     isLoading: boolean;
     error: string | null;
@@ -26,7 +27,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         if (token && !user) {
             fetchCurrentUser()
         }
-    }, [token])
+    }, [token, user])
     const login = async (credentials: LoginCredentials) => {
         setLoading(true);
         setError(null);
@@ -71,18 +72,19 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const fetchCurrentUser = async () => {
         setLoading(true)
         try {
-            const res = await api.get('/auth/me', {
+            const token = localStorage.getItem('token');
+            const response = await api.get('/auth/me', {
                 headers: {
-                    Authorization: `Bearer${token}`
+                    Authorization: `Bearer ${token}`,
                 },
-            })
-            console.log(res.data);
-            setUser(res.data.data)
+            });
+            const fetchCurrentUser = response.data.data;
+            setUser(fetchCurrentUser)
             setIsAuthenticated(true)
-        }
-        catch (err: any) {
-            setError(err.response?.data?.message || 'Failed to fetch user');
-            logout()
+        } catch (error: any) {
+            setUser(null); // Optional: clear user on failure
+            setIsAuthenticated(false); // Optional
+            toast.error(error.response?.data?.message || 'Failed to fetch user');
         }
         finally {
             setLoading(false)
@@ -104,8 +106,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
 export const useAuth = () => {
     const context = useContext(AuthContext);
-    if(!context)
-    {
+    if (!context) {
         throw new Error('useAuth must be within an AuthProvider')
     }
     return context

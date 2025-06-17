@@ -1,10 +1,8 @@
 import { Outlet, Link } from 'react-router-dom';
 import { useState } from 'react';
-// import SideNav from '../sidebar/SideNav';
-// import TopNav from '../sidebar/TopNav';
-import SideNav from './SideNav';
-import TopNav from './TopNav';
 import { Box, CssBaseline, Drawer } from '@mui/material';
+import AdminTopNav from './AdminTopNav';
+import { AdminSidebar } from './AdminSideBar';
 
 const drawerWidth = 300;
 
@@ -24,7 +22,8 @@ const AdminLayout = () => {
           px: 2,
         }}
       >
-        <TopNav />
+        {/* <TopNav /> */}
+        <AdminTopNav/>
       </Box>
 
       {/* Sidebar (SideNav) */}
@@ -44,7 +43,7 @@ const AdminLayout = () => {
           },
         }}
       >
-        <SideNav />
+        <AdminSidebar />
       </Drawer>
 
       {/* Main content area */}

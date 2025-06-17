@@ -8,6 +8,7 @@ import {
   PRIMARY_TEXT,
   BULK_BG,
 } from "../../lib/colors";
+import { useAuth } from "../../contexts/AuthContext";
 
 type Subcategory = {
   id: number;
@@ -31,11 +32,7 @@ const SideNav = ({
   const navigate = useNavigate();
   const location = useLocation();
   const theme = useTheme();
-
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    navigate("/login");
-  };
+    const { logout } = useAuth();
 
   const isActive = (id: number) => selectedSubcategoryId === id;
 
@@ -97,7 +94,7 @@ const SideNav = ({
       {/* Logout */}
       <Box sx={{ p: 2, borderTop: '1px solid #f0f0f0' }}>
         <Button
-          onClick={handleLogout}
+          onClick={logout}
           fullWidth
           variant="outlined"
           startIcon={<LogOut size={20} color="#5E35B1" />}
