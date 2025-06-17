@@ -45,7 +45,7 @@ const ProfileLayout = () => {
 
   const showToggle = isAdmin && (isOnApps || isOnAdmin);
   const toggleLinkPath = isOnApps ? '/datacruize' : '/apps';
-  const toggleLinkLabel = isOnApps ? 'Go to Admin Panel' : 'Explore Apps';
+  const toggleLinkLabel = isOnApps ? 'Admin Panel' : 'Explore Apps';
 
   return (
     <div style={{ padding: '1rem' }}>

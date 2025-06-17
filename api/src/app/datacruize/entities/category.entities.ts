@@ -17,7 +17,7 @@ export class Category {
   @Column({default: false})
   status!: boolean;
 
-  @Column({nullable: true})
+  @Column({nullable: true,})
   order!: number
 
   @OneToMany(() => Subcategory, (subcat) => subcat.category)

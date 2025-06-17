@@ -1,7 +1,14 @@
-import { Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
+import { Box, Dialog, DialogActions, DialogContent, DialogTitle, MenuItem, TextField } from '@mui/material';
 import React from 'react'
 import { CustomButton } from '../../../components/ui/Button';
 
+interface FormField {
+    label: string;
+    id: string;
+    placeholder: string;
+    type?: string;
+    options?: { id: number; name: string }[];
+}
 export interface SubCategoryDialogProps {
     open: boolean;
     isEditMode: boolean;
@@ -10,95 +17,61 @@ export interface SubCategoryDialogProps {
     onChange: (fieldId: string, value: any) => void;
     onSubmit: () => void;
 }
-interface FormField {
+interface CategoryFormProps {
     open: boolean;
     isEditMode: boolean;
-    // formFields: FormField[];
+    formFields: FormField[];
     formData: any;
     onClose: () => void;
     onChange: (fieldId: string, value: any) => void;
     onSubmit: () => void;
 }
 const AddCategory = ({
-     open,
+    open,
     isEditMode,
+    formFields,
+    formData,
     onClose,
+    onChange,
     onSubmit,
-}: SubCategoryDialogProps) => {
+}: CategoryFormProps) => {
     return (
         <Dialog
-        open={open}
-        onClose={onClose}
-    // sx={{
-    //     '& .MuiDialog-paper': {
-    //         width: '44%',
-    //         maxWidth: 'none',
-    //         padding: '20px',
-    //         borderRadius: '20px',
-    //         backgroundColor: `${FORM_BACKGROUND}`
-    //     },
-    // }}
-    >
-        <DialogTitle className="text-deepPurple" sx={{ fontWeight: 700 }}>{isEditMode ? 'Update Brand' : 'Add Brand'}</DialogTitle>
-        <hr className="bg-stone-600" />
-        <DialogContent sx={{ padding: '7px 21px' }}>
-            {/* <div className="grid lg:grid-cols-2 md:grid-cols-1  text-sm pt-3 text-textColor font-semibold leading-8 gap-2">
-                {formFields.map((field) => (
-                    <div key={field.id}>
-                        <p>{field.label}</p>
-                        {field.type === 'select' ? (
-                            <TextField
-                                select
-                                id={field.id}
-                                variant="outlined"
-                                value={formData[field.id]?.id || ''}
-                                onChange={(e) => {
-                                    const selected = field.options?.find((opt: any) => opt.id === e.target.value);
-                                    onChange(field.id, selected);
-                                }}
-                                SelectProps={{ displayEmpty: true }}
-                                sx={{
-                                    '& .MuiSelect-icon': {
-                                        width: '2rem',
-                                    },
-                                    ...formStyle
-                                }}
-                            >
-                                <MenuItem value="" disabled>{field.placeholder}</MenuItem>
-                                {field.options?.map((option) => (
-                                    <MenuItem key={option.id} value={option.id}>
-                                        {option.name}
-                                    </MenuItem>
-                                ))}
-                            </TextField>
-                        ) : (
+            open={open}
+            onClose={onClose}
+        >
+            <DialogTitle className="text-deepPurple" sx={{ fontWeight: 700 }}>{isEditMode ? 'Update Category' : 'Add Catgory'}</DialogTitle>
+            <DialogContent >
+                <Box sx={{ display: 'flex', gap: 2, flexDirection: 'row', alignItems: 'center' }}>
+                    {formFields.map((field) => (
+                        <div key={field.id} style={{ marginBottom: '1rem' }}>
+                            <p>{field.label}</p>
                             <TextField
                                 id={field.id}
                                 variant="outlined"
                                 placeholder={field.placeholder || ''}
+                                type={field.type === 'number' ? 'number' : 'text'} // ✅ Allow number input
                                 value={formData[field.id] || ''}
-                                onChange={(e) => onChange(field.id, e.target.value)}
-                                sx={formStyle} />
-                        )}
-                    </div>
-                ))}
-            </div> */}
-            Dialog content for the category
-        </DialogContent>
-        <DialogActions sx={{ padding: '30px', gap: '15px' }}>
-            <CustomButton
-                label="Cancel"
-                btnType="cancel"
-                onClick={onClose} />
-            <CustomButton
-                label={isEditMode ? 'Update' : 'Create'}
-                btnType="normal"
-                onClick={onSubmit} />
-        </DialogActions>
-    </Dialog>
+                                onChange={(e) => onChange(field.id, field.type === 'number' ? Number(e.target.value) : e.target.value)}
+                            />
+                        </div>
+                    ))}
+                </Box>
+            </DialogContent>
+            <DialogActions>
+                <CustomButton
+                    label="Cancel"
+                    btnType="cancel"
+                    onClick={onClose} />
+                <CustomButton
+                    label={isEditMode ? 'Update' : 'Create'}
+                    btnType="normal"
+                    onClick={onSubmit} />
+            </DialogActions>
+        </Dialog>
 
     )
-    
+
 }
 
 export default AddCategory

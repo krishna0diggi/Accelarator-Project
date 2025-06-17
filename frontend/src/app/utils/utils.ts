@@ -1,5 +1,7 @@
 export const subcategoryColumns = [
-//   { id: 'name', label: 'SubCategory Name' },
-  { id: 'categoryName', label: 'Category Name' },
-  { id: 'toggleStatus', label: 'Status' },
+  { id: 'id', label: 'Id' },
+  { id: 'name', label: 'Category Name' },
+  { id: 'order', label: 'Ordering' },
+   { id: 'toggleStatus', label: 'Status' },
+
 ];

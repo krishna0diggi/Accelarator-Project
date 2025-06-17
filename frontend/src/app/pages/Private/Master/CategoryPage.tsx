@@ -19,7 +19,7 @@ import { CustomLoader } from '../../../components/ui/loading';
 import { Box, CircularProgress, Stack } from '@mui/material';
 
 const CategoryPage = () => {
-  const [subCategories, setSubCategories] = useState<any[]>([]);
+  const [categories, setcategories] = useState<any[]>([]);
   const [paginator, setPaginator] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [open, setOpen] = useState(false);
@@ -30,27 +30,28 @@ const CategoryPage = () => {
   const [deleteItem, setDeleteItem] = useState<any>(null);
   const [pageIndex, setPageIndex] = useState(0);
   const [pageSize, setPageSize] = useState(5);
-  const [searchValue, setSearchValue] = useState('');
+  const [searchValue, setSearchValue] = useState("");
 
-  const fetchSubCategories = async () => {
+  const fetchCategories = async () => {
     setIsLoading(true);
     try {
       const data = await getAllCategory(pageIndex, pageSize, searchValue);
-      // setSubCategories(data.result || []);
-      // setPaginator(data.paginatorValue || null);
+      console.log(data);
+      setcategories(data.result || []);
+      setPaginator(data.paginatorValue || null);
     } catch (error: any) {
-      toast.error(error.message || 'Failed to fetch subcategories');
+      toast.error(error.message || 'Failesd to fetch categories');
     } finally {
       setIsLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchSubCategories();
+    fetchCategories();
     // eslint-disable-next-line
   }, [pageIndex, pageSize, searchValue]);
 
-  const tableData = subCategories.map((item) => ({
+  const tableData = categories.map((item) => ({
     ...item,
     categoryName: item.category?.name,
   }));
@@ -66,7 +67,8 @@ const CategoryPage = () => {
     setOpen(false);
     const payload = {
       name: formData.name,
-      categoryId: formData.category.id,
+      // categoryId: formData.category.id,
+      order:formData.order,
       status: true
     };
     try {
@@ -77,7 +79,7 @@ const CategoryPage = () => {
         await createCategory(payload);
         toast.success(`${payload.name} Created`);
       }
-      fetchSubCategories();
+      fetchCategories();
     } catch (error: any) {
       toast.error(error.message || 'Something went wrong!');
     }
@@ -91,6 +93,7 @@ const CategoryPage = () => {
     setSelectedItemId(row.id);
     setFormData({
       category: row.category,
+      order:row.order,
       name: row.name,
     });
     setOpen(true);
@@ -107,7 +110,7 @@ const CategoryPage = () => {
       try {
         await deleteCategory(deleteItem.id);
         toast.success(`${deleteItem.name} deleted successfully`);
-        fetchSubCategories();
+        fetchCategories();
       } catch (error: any) {
         toast.error(error.message || 'Delete failed');
       }
@@ -126,7 +129,7 @@ const CategoryPage = () => {
 
   // Toggle Change
   const handleToggleStatus = async (row: any, checked: boolean) => {
-    setSubCategories((prev) =>
+    setcategories((prev) =>
       prev.map((item) =>
         item.id === row.id ? { ...item, status: checked } : item
       )
@@ -134,7 +137,7 @@ const CategoryPage = () => {
     // Prepare payload for backend
     const payload = {
       name: row.name,
-      categoryId: row.category.id,
+      order:row.order,
       status: checked,
     };
 
@@ -145,21 +148,26 @@ const CategoryPage = () => {
       }
     } catch (error: any) {
       toast.error(error.message || 'Something went wrong!');
-      setSubCategories((prev) =>
+      setcategories((prev) =>
         prev.map((item) =>
           item.id === row.id ? { ...item, status: !checked } : item
         )
       );
     }
   };
+  
+    const formFields = [
+        { label: 'Name', id: 'name', placeholder: 'Select Name', },
+        { label: 'Order', id: 'order', placeholder: 'Enter Order' , type:'number'},
+    ];
 
   return (
     <Stack direction="column" spacing={3} pt={3}>
       {/* Top Bar */}
-      <Box display="flex" justifyContent="space-between" alignItems="center">
+      <Box>
         <CustomButton
           iconComponent={<CirclePlus size={20} />}
-          label="Add Sub-Category"
+          label="Add"
           btnType="normal"
           onClick={handleClickOpen}
         />
@@ -170,7 +178,7 @@ const CategoryPage = () => {
       <AddCategory
         open={open}
         isEditMode={isEditMode}
-        // formFields={formFields}
+        formFields={formFields}
         formData={formData}
         onClose={() => setOpen(false)}
         onChange={handleChange}
@@ -204,7 +212,7 @@ const CategoryPage = () => {
           onToggleStatus={handleToggleStatus}
           pageIndex={pageIndex}
           pageSize={pageSize}
-          totalCount={paginator?.totalItems ?? 0}
+          totalCount={paginator?.totalData ?? 0}
           onPageSizeChange={({ pageIndex, pageSize }) => {
             setPageIndex(pageIndex);
             setPageSize(pageSize);

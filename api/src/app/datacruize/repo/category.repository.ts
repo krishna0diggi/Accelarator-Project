@@ -78,18 +78,14 @@ export class CategoryRepository {
         "category.id",
         "category.name",
         "subcategory.id",
-        "subcategory.id",
         "subcategory.name",
         "subcategory.url",
         "subcategory.title",
         "subcategory.description",
       ])
       .where("category.status = :status",{status:true})
+       .orderBy("category.order", "ASC") 
       .getMany();
-    // const formatted = result.map(category => ({
-    //   ...category,
-
-    // }))
     return result;
   }
   async updateCategory(

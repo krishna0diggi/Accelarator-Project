@@ -14,8 +14,8 @@ export type Category = {
 };
 
 
-export type subCategoryData = {
+export type CategoryPayload = {
   name: string,
-  categoryId: number,
+  order:number,
   status: boolean
 }

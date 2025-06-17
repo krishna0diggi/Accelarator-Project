@@ -41,7 +41,7 @@ export class CategoryService {
   // ADMIN
   async update(id:number, updateData: Partial<CategoryDto>) {
     console.log("Id", id);
-    console.log("To update the data", updateData);
+    // console.log("To update the data", updateData);
     return this.categoryRepo.updateCategory(id, updateData);
   }
 

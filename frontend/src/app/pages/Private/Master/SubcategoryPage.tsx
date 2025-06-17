@@ -2,7 +2,9 @@ import React from 'react'
 
 const SubcategoryPage = () => {
   return (
-    <div>SubcategoryPage</div>
+    <div>
+      table and buttons
+    </div>
   )
 }
 
