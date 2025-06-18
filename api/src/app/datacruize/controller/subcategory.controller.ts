@@ -40,8 +40,10 @@ export class SubcategoryController {
   return this.subcategoryService.getAll(pageIndex, pageSize, searchValue)
 }
   @Get('/subcat-with-cat')
-  async getSubcatWithCategory(){
-    return this.subcategoryService.getSubcategoryWithCategory()
+  async getSubcatWithCategory(  @Query('pageIndex') pageIndex:number,
+    @Query('pageSize') pageSize:number,
+    @Query('searchFilter') searchValue: string){
+    return this.subcategoryService.getSubcategoryWithCategory(pageIndex, pageSize, searchValue)
   }
 
   @Get(':id')

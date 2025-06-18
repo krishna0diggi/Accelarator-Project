@@ -4,7 +4,7 @@ import { CirclePlus } from 'lucide-react';
 // import SearchInput from '../../../components/ui/Search';
 import DeleteDialog from '../../../components/ui/Delete';
 import DataTable from '../../../components/ui/Table';
-import { subcategoryColumns } from '../../../utils/utils';
+import { categoryColumn } from '../../../utils/utils';
 // import SubCategoryDialog from './SubCategoryDialog';
 import AddCategory from './AddCategory';
 import { toast } from 'react-toastify';
@@ -205,7 +205,7 @@ const CategoryPage = () => {
         </Box>
       ) : (
         <DataTable
-          columns={subcategoryColumns}
+          columns={categoryColumn}
           rows={tableData}
           onEdit={handleEdit}
           onDelete={handleDelete}

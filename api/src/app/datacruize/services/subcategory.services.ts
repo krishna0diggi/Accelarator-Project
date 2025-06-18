@@ -50,8 +50,12 @@ export class SubcategoryService {
       searchValue
     );
   }
-  async getSubcategoryWithCategory() {
-    return await this.subcategoryRepo.findSubcategoryWithCategory();
+  async getSubcategoryWithCategory( pageIndex: number,
+    pageSize: number,
+    searchValue: string) {
+    return await this.subcategoryRepo.findSubcategoryWithCategory(  pageIndex,
+      pageSize,
+      searchValue);
   }
 
   async getById(id: number) {

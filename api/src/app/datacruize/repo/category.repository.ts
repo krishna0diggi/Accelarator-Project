@@ -73,7 +73,13 @@ export class CategoryRepository {
   async findCategoryWithSubcategory(): Promise<any> {
     const result = await this.categoryRepo
       .createQueryBuilder("category")
-      .leftJoinAndSelect("category.subcategories", "subcategory")
+      // .leftJoinAndSelect("category.subcategories", "subcategory")
+       .leftJoinAndSelect(
+      "category.subcategories",
+      "subcategory",
+      "subcategory.status = :status", // Filter subcategory status
+      { status: true }
+    )
       .select([
         "category.id",
         "category.name",

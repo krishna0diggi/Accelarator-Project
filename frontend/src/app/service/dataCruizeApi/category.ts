@@ -17,7 +17,7 @@ export const createCategory = async (data: CategoryPayload) => {
     return response.data;
   } catch (error: any) {
     throw new Error(
-      error.response?.data?.message || "Unable to create Sub-Category"
+      error.response?.data?.message || "Unable to create Category"
     );
   }
 };
@@ -27,7 +27,7 @@ export const deleteCategory = async (id: number) => {
     return response.data;
   } catch (error: any) {
     throw new Error(
-      error.response?.data?.message || "Unable to delete Sub-Category"
+      error.response?.data?.message || "Unable to delete Category"
     );
   }
 };
@@ -58,7 +58,18 @@ export const updateCategory = async (id: number, data: CategoryPayload) => {
     return response.data;
   } catch (error: any) {
     throw new Error(
-      error.response?.data?.message || "Unable to update Sub-Category"
+      error.response?.data?.message || "Unable to update Category"
     );
   }
 };
+// getall
+export const getAllActiveCategory = async() => {
+  try {
+    const response = await api.get('/category/getall');
+    return response.data;
+  } catch (error: any) {
+    throw new Error(
+      error.response?.data?.message || "Unable to fetch Category"
+    );
+  }
+}

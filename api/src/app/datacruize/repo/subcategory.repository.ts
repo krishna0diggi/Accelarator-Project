@@ -67,27 +67,63 @@ export class SubcategoryRepo {
 
     return { result, paginatorValue };
   }
-  async findSubcategoryWithCategory(): Promise<any> {
-    const result = await this.subcategoryRepo
-      .createQueryBuilder("subcategory")
-      .innerJoinAndSelect("subcategory.category", "category")
-      .select([
-        "subcategory.id",
-        "subcategory.name",
-        "subcategory.url",
-        "subcategory.title",
-        "subcategory.description",
-        "category.name",
-      ])
-      .getMany();
+async findSubcategoryWithCategory(
+  pageIndex: number,
+  pageSize: number,
+  searchValue: string
+): Promise<{ result: any[]; paginatorValue: any }> {
+  const cleanedSearch = searchValue?.trim().replace(/^"|"$/g, "");
+  const skip = (pageIndex - 1) * pageSize;
 
-    const formatted = result.map((subcat) => ({
-      ...subcat,
-      categoryName: subcat.category.name,
-    }));
+  const query = this.subcategoryRepo
+    .createQueryBuilder("subcategory")
+    .innerJoinAndSelect("subcategory.category", "category")
+    .select([
+      "subcategory.id",
+      "subcategory.name",
+      "subcategory.url",
+      "subcategory.title",
+      "subcategory.description",
+      "subcategory.status",
+      "subcategory.order",
+      "category.name",
+    ]);
 
-    return formatted;
+  // ✅ Apply search filter if provided
+  if (cleanedSearch) {
+    query.where("subcategory.name ILIKE :search", { search: `%${cleanedSearch}%` });
   }
+
+  // ✅ Apply pagination
+  const [subcategories, totalCount] = await query
+    .orderBy("subcategory.id", "DESC")
+    .skip(skip)
+    .take(pageSize)
+    .getManyAndCount();
+
+  // ✅ Format results
+  const result = subcategories.map((subcat) => ({
+    id: subcat.id,
+    name: subcat.name,
+    url: subcat.url,
+    title: subcat.title,
+    description: subcat.description,
+    order: subcat.order,
+    status: subcat.status,
+    categoryName: subcat.category.name,
+  }));
+
+  // ✅ Generate paginator info
+  const paginatorValue = await this.paginatorService.paginatorCount(
+    pageIndex,
+    pageSize,
+    totalCount,
+    result
+  );
+
+  return { result, paginatorValue };
+}
+
 
   async findByName(name: string): Promise<Subcategory | null> {
     return await this.subcategoryRepo.findOne({
