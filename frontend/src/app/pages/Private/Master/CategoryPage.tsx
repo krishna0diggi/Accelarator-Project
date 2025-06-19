@@ -36,7 +36,7 @@ const CategoryPage = () => {
     setIsLoading(true);
     try {
       const data = await getAllCategory(pageIndex, pageSize, searchValue);
-      console.log(data);
+      // console.log(data);
       setcategories(data.result || []);
       setPaginator(data.paginatorValue || null);
     } catch (error: any) {

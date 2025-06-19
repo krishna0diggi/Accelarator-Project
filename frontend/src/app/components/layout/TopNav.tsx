@@ -9,6 +9,7 @@ import {
   TEXT_COLOR,
 } from "../../lib/colors";
 import { Category } from "../../models/dataCruize";
+import img from '../../../assets/dc2.png'
 
 type TopNavProps = {
   layoutData: Category[];
@@ -80,6 +81,10 @@ export default function TopNav({
           </Select>
 
         </FormControl>
+      </Box>
+
+      <Box>
+       <img src={img} alt="DataCruize Logo" style={{ width: '200px', height: 'auto', margin: '20px' }} />
       </Box>
 
       {/* Right Side Avatar */}

@@ -14,7 +14,7 @@ async function bootstrap() {
   //   credentials: true,
   // });
   app.enableCors({
-    origin: ['http://localhost:4221', 'http://192.168.1.16:4221'],
+    origin: ['http://localhost:4221', 'http://192.168.1.16:4221', 'http://192.168.1.16:4222','http://localhost:4222'],
     credentials: true,
   })
   const globalPrefix = 'api';

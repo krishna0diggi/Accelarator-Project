@@ -35,7 +35,7 @@ const SubcategoryPage = () => {
     setIsLoading(true);
     try {
       const data = await getAllSubcategory(pageIndex, pageSize, searchValue);
-      console.log(data);
+      // console.log(data);
       setSubcategories(data.result || []);
       setPaginator(data.paginatorValue || null);
     } catch (error: any) {
@@ -52,15 +52,15 @@ const SubcategoryPage = () => {
   }));
   const category = categoryDataDropdown.map((item: any) => ({
     id: item.id,
-    name: item.name
+    name: item.categoryName
   }))
   const formFields = [
-    { label: 'Category', id: 'categoryId', placeholder: 'Select Category', type: 'select', options: category },
+    { label: 'Category', id: 'category', placeholder: 'Select Category', type: 'select', options: category },
     { label: 'Name', id: 'name', placeholder: 'Enter Name', },
-    { label: 'Url', id: 'url', placeholder: 'Enter URL', },
+    { label: 'URL', id: 'url', placeholder: 'Enter URL', },
     { label: 'Title', id: 'title', placeholder: 'Enter Title', },
     { label: 'Description', id: 'description', placeholder: 'Enter Description', },
-    { label: 'Order', id: 'order', placeholder: 'Enter Order', type: 'number' },
+    // { label: 'Order', id: 'order', placeholder: 'Enter Order', type: 'number' },
   ];
   const handleClickOpen = () => {
     setIsEditMode(false);
@@ -72,7 +72,7 @@ const SubcategoryPage = () => {
   const handleSubmit = async () => {
     setOpen(false);
     const payload = {
-       id: 0,
+      id: 0,
       name: formData.name,
       // categoryId: formData.category.id,
       url: formData.url,
@@ -100,12 +100,24 @@ const SubcategoryPage = () => {
   };
 
   const handleEdit = (row: any) => {
+    // console.log("Data from categoryDropdownm", categoryDataDropdown);
+
+    const selectedCategory = categoryDataDropdown.find(
+      (cat) => cat.id === row.categoryId
+    );
+    // console.log("Selected Category", selectedCategory);
+
     setIsEditMode(true);
     setSelectedItemId(row.id);
     setFormData({
-      category: row.category,
+      id: row.id,
+      category: selectedCategory || null,
       order: row.order,
       name: row.name,
+      title: row.title,
+      url: row.url,
+      description: row.description
+
     });
     setOpen(true);
   };

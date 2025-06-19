@@ -4,7 +4,7 @@ import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 
 const tabRoutes = [
     { label: 'Category', path: '/datacruize/category' },
-    { label: 'Sub-Category', path: '/datacruize/subcategory' },
+    { label: 'Application', path: '/datacruize/subcategory' },
 ];
 
 const Master = () => {

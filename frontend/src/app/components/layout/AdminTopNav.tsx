@@ -9,6 +9,7 @@ import {
   TEXT_COLOR,
 } from "../../lib/colors";
 import { Category } from "../../models/dataCruize";
+import img from '../../../assets/dc2.png'
 
 // type TopNavProps = {
 //   layoutData: Category[];
@@ -53,6 +54,10 @@ export default function AdminTopNav() {
       <Box sx={{ minWidth: 180, mr: 2 }}>
        <Typography>Admin Panel</Typography>
       </Box>
+
+       <Box>
+             <img src={img} alt="DataCruize Logo" style={{ width: '200px', height: 'auto', margin: '20px' }} />
+            </Box>
 
       {/* Right Side Avatar */}
       <Box display="flex" alignItems="center" gap={2}>

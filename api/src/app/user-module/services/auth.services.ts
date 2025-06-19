@@ -143,9 +143,6 @@ export class AuthService {
         },
         role: employee.role.name,
       };
-      console.log("Auth service after login", userWithoutSensitiveData);
-      
-
       return userWithoutSensitiveData;
     } catch (error) {
       throw new UnauthorizedException('Token is invalid or expired');

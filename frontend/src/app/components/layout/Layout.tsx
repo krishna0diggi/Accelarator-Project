@@ -19,7 +19,7 @@ const Layout = () => {
   const selectedSubcategories = selectedCategory ? selectedCategory.subcategories : [];
 
   const {user} = useAuth()
-  console.log("User is",user);
+
   
 
   useEffect(() => {
