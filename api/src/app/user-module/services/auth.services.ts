@@ -59,9 +59,7 @@ export class AuthService {
       isVerified: false,
       isActive: true,
     };
-
     await this.userRepo.createUser(newUser);
-
     return { message: "User Registered Successfully" };
   }
   async login(loginDto: LoginDto):Promise<{

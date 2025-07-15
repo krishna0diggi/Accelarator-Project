@@ -59,7 +59,7 @@ export default function TopNav({
       {/* Category Select */}
       <Box sx={{ minWidth: 180, mr: 2 }}>
         <FormControl fullWidth>
-          <InputLabel id="category-select-label">Data Cruize</InputLabel>
+          <InputLabel id="category-select-label">Category</InputLabel>
           <Select
             labelId="category-select-label"
             value={selectedCategoryId === "" ? "" : selectedCategoryId.toString()}

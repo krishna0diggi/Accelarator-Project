@@ -36,16 +36,16 @@ export default function IFrame() {
                         {selectedSubcategory.description}
                     </Typography>
                 }
-                action={
-                    <Button
-                        variant="outlined"
-                        size="small"
-                        endIcon={<ExternalLink />}
-                        onClick={() => window.open(selectedSubcategory.url, "_blank")}
-                    >
-                        Open in New Tab
-                    </Button>
-                }
+                // action={
+                //     <Button
+                //         variant="outlined"
+                //         size="small"
+                //         endIcon={<ExternalLink />}
+                //         onClick={() => window.open(selectedSubcategory.url, "_blank")}
+                //     >
+                //         Open in New Tab
+                //     </Button>
+                // }
                 sx={{ bgcolor: "blue.50", borderBottom: 1, borderColor: "divider", pb: 1 }}
             />
             <Divider />
