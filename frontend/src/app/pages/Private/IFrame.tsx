@@ -2,7 +2,7 @@ import React from "react";
 import { useOutletContext } from "react-router-dom";
 import { Box, Card, CardContent, CardHeader, CardActions, Typography, Button, Divider } from "@mui/material";
 // import OpenInNewIcon from "@mui/icons-material/OpenInNew";
-import { ExternalLink } from 'lucide-react';
+import { ExternalLink, Presentation, Video } from 'lucide-react';
 
 type Subcategory = {
     id: number;
@@ -25,7 +25,11 @@ export default function IFrame() {
 
     return (
         <Card sx={{ boxShadow: 3, borderRadius: 1, overflow: "hidden", marginTop: 2 }}>
+            <Box>
+
+            </Box>
             <CardHeader
+
                 title={
                     <Typography variant="h6" color="primary">
                         {selectedSubcategory.name}
@@ -36,16 +40,51 @@ export default function IFrame() {
                         {selectedSubcategory.description}
                     </Typography>
                 }
-                // action={
-                //     <Button
-                //         variant="outlined"
-                //         size="small"
-                //         endIcon={<ExternalLink />}
-                //         onClick={() => window.open(selectedSubcategory.url, "_blank")}
-                //     >
-                //         Open in New Tab
-                //     </Button>
-                // }
+                action={
+                    // <Button
+                    //     variant="outlined"
+                    //     size="small"
+                    //     endIcon={<ExternalLink />}
+                    //     onClick={() => window.open(selectedSubcategory.url, "_blank")}
+                    // >
+                    //     Open in New Tab
+                    // </Button>
+                    <Box display="flex" alignItems="center" gap={3}>
+                        <Box display="flex" flexDirection="column" alignItems="center">
+                            <Presentation style={{ opacity: 0.5, fontSize: 22 }} />
+                            <Typography
+                                component="span"
+                                sx={{
+                                    fontSize: "12px",
+                                    color: "text.secondary",
+                                    lineHeight: 1,
+                                    mt: 1,
+                                    display: "inline"
+                                }}
+                            >
+                                Getting Started
+                            </Typography>
+                        </Box>
+
+                        <Box display="flex" flexDirection="column" alignItems="center">
+                            <Video style={{ opacity: 0.5, fontSize: 22 }} />
+                            <Typography
+                                component="span"
+                                sx={{
+                                    fontSize: "12px",
+                                    color: "text.secondary",
+                                    lineHeight: 1,
+                                    mt: 1,
+                                    display: "inline"
+                                }}
+                            >
+                                Watch Tutorials
+                            </Typography>
+                        </Box>
+                    </Box>
+
+                }
+
                 sx={{ bgcolor: "blue.50", borderBottom: 1, borderColor: "divider", pb: 1 }}
             />
             <Divider />

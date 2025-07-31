@@ -9,7 +9,7 @@ import {
   TEXT_COLOR,
 } from "../../lib/colors";
 import { Category } from "../../models/dataCruize";
-import img from '../../../assets/dc2.png'
+import img from '../../../assets/logo.svg'
 
 type TopNavProps = {
   layoutData: Category[];

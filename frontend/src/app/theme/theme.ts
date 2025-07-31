@@ -12,16 +12,23 @@ declare module '@mui/material/Button' {
   }
 }
 
-const PRIMARY_COLOR = '#2d5876';
-const PRIMARY_HOVER = '#23234a'; // 20% darker for hover
-const SECONDARY_COLOR = '#2d5876';
-const BACKGROUND_WHITE = '#FFFFFF'; //
-const TEXT_PRIMARY = '#323232'; //
-const TEXT_SECONDARY = '#6e6e6e';
+// const PRIMARY_COLOR = '#2d5876';
+// const PRIMARY_HOVER = '#23234a'; // 20% darker for hover
+// const SECONDARY_COLOR = '#2d5876';
+// const BACKGROUND_WHITE = '#FFFFFF'; //
+// const TEXT_PRIMARY = '#323232'; //
+// const TEXT_SECONDARY = '#6e6e6e';
 const BORDER_RADIUS = 4;
 const INPUT_HEIGHT = 50;
 const FONT_SIZE = 14;
 const DROP_DOWN_HEIGHT = 300;
+
+const PRIMARY_COLOR = '#C73610';        // Deep orange-red
+const PRIMARY_HOVER = '#A62808';        // Darker hover
+const SECONDARY_COLOR = '#121212';      // Very dark gray / near black
+const BACKGROUND_WHITE = '#e9ebee';     // Light background, not pure white
+const TEXT_PRIMARY = '#121212';         // Strong dark text
+const TEXT_SECONDARY = '#3c3c3c'; 
 
 const theme = createTheme({
   palette: {
